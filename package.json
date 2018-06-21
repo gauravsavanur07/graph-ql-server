@@ -1,0 +1,11 @@
+{
+  "name": "Desktop",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/gauravsavanur07/firebase-chatApp.git",
+  "author": "Gaurav Savanur <gauravsavanur07@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "graphql-yoga": "^1.14.10"
+  }
+}
