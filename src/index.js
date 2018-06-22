@@ -1,4 +1,5 @@
 const { GraphQLServer } = require('graphql-yoga')
+const { Prisma } = require('prisma-binding')
 
 // 1
 `
@@ -13,21 +14,24 @@ let idCount =links.length
 const resolvers = {
   Query: {
     info: () => 'This is the api of the HackerNews CLone',
-    feed: () => links,
+    feed: (root, args, context, info) => {
+	return context.db.query.links({},info)
+  },
+}
+ 
 
- },
-Mutation :{
-post:(root,args) => {
-const link = {
-id: 'link-${idCount++},
-description:args.description,
-url:args.url,
-}
-links.push(link)
-return link
-}
 },
-}
+Mutation :{
+post:(root,args,context, info) => {
+return context.db.mutation.createLink({
+data: {
+url:args.url,
+description:args.description,
+         },
+      },info)
+     }  ,
+    },
+ }
 
 
  Link: {
@@ -40,5 +44,12 @@ return link
 const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
   resolvers,
+context: req => ({
+...req,
+ db: new Prisma({
+      typeDefs: 'src/generated/prisma.graphql',
+      endpoint: 'https://eu1.prisma.sh/public-graytracker-771/hackernews-node/dev',
+      secret: 'mysecret123',
+      debug: true,
 })
 server.start(() => console.log(`Server is running on http://localhost:4000`))
