@@ -1,5 +1,9 @@
 const { GraphQLServer } = require('graphql-yoga')
 const { Prisma } = require('prisma-binding')
+const Query = require('./resolvers/Query')
+const Mutation = require('./resolvers/Mutation')
+const AuthPayload = require('./resolvers/AuthPayload')
+const Subscription = require('./resolvers/Subscription')
 
 // 1
 `
@@ -12,11 +16,12 @@ let idCount =links.length
 
 // 2
 const resolvers = {
-  Query: {
-    info: () => 'This is the api of the HackerNews CLone',
-    feed: (root, args, context, info) => {
-	return context.db.query.links({},info)
-  },
+  Query,
+  Mutation,
+  AuthPayload,
+  Subscription,   
+
+ },
 }
  
 
